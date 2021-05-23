@@ -32,6 +32,7 @@ func Start() {
 	// define routes
 	router.HandleFunc("/", Hello)
 	router.HandleFunc("/api/users", GetAllUsers).Methods("GET")
+	router.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
 	router.HandleFunc("/api/users", CreateUser).Methods("POST")
 	cors := cors.Default().Handler(router)
 
