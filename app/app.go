@@ -9,6 +9,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -30,10 +31,12 @@ func Start() {
 
 	// define routes
 	router.HandleFunc("/", Hello)
-	router.HandleFunc("/api/users", GetAllUsers)
+	router.HandleFunc("/api/users", GetAllUsers).Methods("GET")
+	router.HandleFunc("/api/users", CreateUser).Methods("POST")
+	cors := cors.Default().Handler(router)
 
 	// starting server
-	http.ListenAndServe(":8000", router)
+	http.ListenAndServe(":8000", cors)
 }
 
 var DB *gorm.DB
@@ -46,10 +49,12 @@ func dbConnect() {
 	database_name := os.Getenv("DB_DATABASE_NAME")
 
 	dns := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + database_name + "?charset=utf8mb4"
-	DB, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
+	database, err := gorm.Open(mysql.Open(dns), &gorm.Config{})
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 
-	DB.AutoMigrate(&domain.User{})
+	DB = database
+
+	database.AutoMigrate(&domain.User{})
 }

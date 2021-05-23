@@ -8,19 +8,15 @@ import (
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	users := []*domain.User{
-		&domain.User{
-			Id:       1,
-			Name:     "a",
-			Email:    "a@a.com",
-			Password: "a",
-		},
-		&domain.User{
-			Id:       2,
-			Name:     "b",
-			Email:    "b@b.com",
-			Password: "b",
-		},
-	}
+	users := []domain.User{}
+	DB.Find(&users)
 	json.NewEncoder(w).Encode(users)
+}
+
+func CreateUser(w http.ResponseWriter, r *http.Request) {
+	user := domain.User{}
+	json.NewDecoder(r.Body).Decode(&user)
+	DB.Create(&user)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
 }
