@@ -30,7 +30,13 @@ func Start() {
 	dbConnect()
 
 	// define routes
-	router.HandleFunc("/", Hello)
+	router.HandleFunc("/api/register", Register).Methods("POST")
+	router.HandleFunc("/api/login", Login).Methods("POST")
+	router.HandleFunc("/api/user", User).Methods("GET")
+	router.HandleFunc("/api/logout", Logout).Methods("GET")
+
+	router.HandleFunc("/api/articles", GetAllArticles).Methods("GET")
+
 	router.HandleFunc("/api/users", GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
 	router.HandleFunc("/api/users", CreateUser).Methods("POST")
@@ -59,5 +65,5 @@ func dbConnect() {
 
 	DB = database
 
-	database.AutoMigrate(&domain.User{})
+	database.AutoMigrate(&domain.User{}, &domain.Article{})
 }
