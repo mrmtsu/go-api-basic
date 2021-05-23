@@ -1,4 +1,4 @@
-package models
+package domain
 
 type User struct {
 	Id       uint   `json:"id"`
