@@ -32,3 +32,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	updateUser := domain.User{}
+	json.NewDecoder(r.Body).Decode(&updateUser)
+	DB.Save(&updateUser)
+
+	json.NewEncoder(w).Encode(updateUser)
+}
