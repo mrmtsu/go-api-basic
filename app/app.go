@@ -34,6 +34,7 @@ func Start() {
 	router.HandleFunc("/api/users", GetAllUsers).Methods("GET")
 	router.HandleFunc("/api/users/{id}", GetUser).Methods("GET")
 	router.HandleFunc("/api/users", CreateUser).Methods("POST")
+	router.HandleFunc("/api/users/{id}", UpdateUser).Methods("PUT")
 	cors := cors.Default().Handler(router)
 
 	// starting server
