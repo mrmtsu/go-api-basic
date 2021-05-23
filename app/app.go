@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"go-api-basic/models"
+	"go-api-basic/domain"
 	"log"
 	"net/http"
 	"os"
@@ -30,6 +30,7 @@ func Start() {
 
 	// define routes
 	router.HandleFunc("/", Hello)
+	router.HandleFunc("/api/users", GetAllUsers)
 
 	// starting server
 	http.ListenAndServe(":8000", router)
@@ -50,5 +51,5 @@ func dbConnect() {
 		fmt.Println(err.Error())
 	}
 
-	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&domain.User{})
 }
