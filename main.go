@@ -1,7 +1,9 @@
 package main
 
-import "go-api-basic/routes"
+import (
+	"go-api-basic/app"
+)
 
 func main() {
-	routes.Start()
+	app.Start()
 }
