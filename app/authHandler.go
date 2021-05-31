@@ -26,7 +26,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: エラーハンドリング
 	if data["password"] != data["password_confirm"] {
-		w.WriteHeader(400)
+		http.NotFound(w, r)
+		return
 	}
 
 	user := domain.User{
@@ -58,12 +59,16 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// TODO: エラーハンドリング
 	if user.Id == 0 {
-		w.WriteHeader(400)
+		http.NotFound(w, r)
+		return
 	}
 
 	// TODO: エラーハンドリング
 	if err := user.ComparePassword(data["password"]); err != nil {
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusUnauthorized)
+		// result.Status = http.StatusBadRequest
+		// result.Message = "Content-Type entity header is need application/json"
+		return
 	}
 
 	claims := jwt.StandardClaims{
@@ -99,7 +104,7 @@ func User(w http.ResponseWriter, r *http.Request) {
 		return []byte(os.Getenv("SIGNINGKEY")), nil
 	})
 	if err != nil || !token.Valid {
-		log.Fatal("unauthenticated")
+		log.Println("Error while scaning customer" + err.Error())
 	}
 
 	claims := token.Claims.(*Claims)
