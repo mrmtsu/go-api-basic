@@ -1,6 +1,10 @@
 package domain
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"go-api-basic/errs"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type User struct {
 	Id       uint   `json:"id"`
@@ -16,4 +20,8 @@ func (u *User) SetPassword(password string) {
 
 func (u *User) ComparePassword(password string) error {
 	return bcrypt.CompareHashAndPassword(u.Password, []byte(password))
+}
+
+type UserRepository interface {
+	Register(User) (*User, *errs.AppError)
 }
